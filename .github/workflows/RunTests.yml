@@ -2,23 +2,25 @@ name: .NET Build and Test
 
 on: [push, pull_request]
 
+env:
+   SOURCE_DIRECTORY: src
+
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore $SOURCE_DIRECTORY
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build $SOURCE_DIRECTORY --no-restore
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - name: Test
+        run: dotnet test $SOURCE_DIRECTORY --no-build --verbosity normal
