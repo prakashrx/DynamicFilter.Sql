@@ -8,46 +8,44 @@ namespace DynamicFilter.Sql.Tests
         [Fact]
         public void Should_Throw_No_Exceptions_While_Parsing()
         {
-            Generator generator = new Generator();
+            FilterExpression.Compile<Object>("1");
+            FilterExpression.Compile<Object>("a");
+            FilterExpression.Compile<Object>("(a)");
+            FilterExpression.Compile<Object>("(1)");
+            FilterExpression.Compile<Object>("a < 1");
+            FilterExpression.Compile<Object>("a > 1");
+            FilterExpression.Compile<Object>("a <= 1");
+            FilterExpression.Compile<Object>("a >= 1");
+            FilterExpression.Compile<Object>("a = 1");
+            FilterExpression.Compile<Object>("a == 1");
 
-            generator.Generate("1");
-            generator.Generate("a");
-            generator.Generate("(a)");
-            generator.Generate("(1)");
-            generator.Generate("a < 1");
-            generator.Generate("a > 1");
-            generator.Generate("a <= 1");
-            generator.Generate("a >= 1");
-            generator.Generate("a = 1");
-            generator.Generate("a == 1");
+            FilterExpression.Compile<Object>("a = true");
+            FilterExpression.Compile<Object>("a == true");
+            FilterExpression.Compile<Object>("a = false");
+            FilterExpression.Compile<Object>("a == false");
+            FilterExpression.Compile<Object>("a != true");
+            FilterExpression.Compile<Object>("a is null");
+            FilterExpression.Compile<Object>("a IS NULL");
+            FilterExpression.Compile<Object>("a IS null");
+            FilterExpression.Compile<Object>("a is not null");
+            FilterExpression.Compile<Object>("a IS not null");
+            FilterExpression.Compile<Object>("a IS NOT NULL");
 
-            generator.Generate("a = true");
-            generator.Generate("a == true");
-            generator.Generate("a = false");
-            generator.Generate("a == false");
-            generator.Generate("a != true");
-            generator.Generate("a is null");
-            generator.Generate("a IS NULL");
-            generator.Generate("a IS null");
-            generator.Generate("a is not null");
-            generator.Generate("a IS not null");
-            generator.Generate("a IS NOT NULL");
+            FilterExpression.Compile<Object>("a = 'abc'");
+            FilterExpression.Compile<Object>("a == 'abc'");
 
-            generator.Generate("a = 'abc'");
-            generator.Generate("a == 'abc'");
+            FilterExpression.Compile<Object>("a like 'abc'");
+            FilterExpression.Compile<Object>("a not like '%abc%'");
 
-            generator.Generate("a like 'abc'");
-            generator.Generate("a not like '%abc%'");
+            FilterExpression.Compile<Object>("a in (1,2,3)");
+            FilterExpression.Compile<Object>("a not in (1,2,3)");
+            FilterExpression.Compile<Object>("a in ('1','2','3')");
+            FilterExpression.Compile<Object>("a not in ('1','2','3')");
 
-            generator.Generate("a in (1,2,3)");
-            generator.Generate("a not in (1,2,3)");
-            generator.Generate("a in ('1','2','3')");
-            generator.Generate("a not in ('1','2','3')");
-
-            generator.Generate("a == 1 or a == 2");
-            generator.Generate("a == 1 and a == 2");
-            generator.Generate("not (a == 1)");
-            generator.Generate("(a == 1 or a ==2) or (b = 2)");
+            FilterExpression.Compile<Object>("a == 1 or a == 2");
+            FilterExpression.Compile<Object>("a == 1 and a == 2");
+            FilterExpression.Compile<Object>("not (a == 1)");
+            FilterExpression.Compile<Object>("(a == 1 or a ==2) or (b = 2)");
         }
     }
 }
