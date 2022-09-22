@@ -1,7 +1,7 @@
 # .github/workflows/version.yml
 name: Git Version
 
-on: [workflow_dispatch]
+on: [push]
 
 jobs:
   version:
@@ -19,7 +19,5 @@ jobs:
         with:
           minor-identifier: feat
           release-branch: main
-
-
       - name: Display Version
         run: echo "${{ toJson(steps.version.outputs)  }}"
