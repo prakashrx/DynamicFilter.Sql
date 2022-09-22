@@ -1,7 +1,7 @@
 # .github/workflows/version.yml
 name: Git Version
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   version:
@@ -10,14 +10,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}   # checkout the correct branch name
           fetch-depth: 0                # fetch the whole repo history
 
-      - name: Git Version
+      - name: Determine Version
         id: version
-        uses: codacy/git-version@2.5.4
-        with:
-          minor-identifier: feat
-          release-branch: main
+        uses: gittools/actions/gitversion/execute@v0.9.7
+
+
       - name: Display Version
         run: echo "${{ toJson(steps.version.outputs)  }}"
