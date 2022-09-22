@@ -5,7 +5,7 @@ root : expr EOF;
 expr : '(' expr ')'                                 #paranexpr
     | NOT expr                                      #notExpr    
     | left=expr operation=compareop right=expr      #compareExpr
-    | left=expr operation=likeop right=STRING    #compareLikeExpr
+    | left=expr operation=likeop right=STRING       #compareLikeExpr
     | left=expr operation=listop right=list         #listExpr
     | left=expr operation=nullop                    #nullExpr
     | left=expr operation=logicalop right=expr      #logicExpr
@@ -13,11 +13,18 @@ expr : '(' expr ')'                                 #paranexpr
     | IDENTIFIER                                    #identifierExpr
     ;
 
-list: '(' constant (',' constant)* ')';
+list: '(' constant (',' constant)* ')'              #listValue
+    ;
 
 //Symbols and Constants
-constant: number | STRING | BOOL;
-number: DECIMAL | INTEGER;
+constant: number                                    #numericValue
+    | STRING                                        #stringValue
+    | BOOL                                          #booleanValue
+    ;
+
+number: DECIMAL                                     #decimalValue
+    | INTEGER                                       #integerValue
+    ;
 DECIMAL: '-'? [0-9]+ '.' [0-9]+;
 INTEGER: '-'? [0-9]+;
 STRING:  '\'' ( ~'\'' | '\'\'')* '\'' | '"' ( ~'"' | '""')* '"';
