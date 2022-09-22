@@ -1,9 +1,14 @@
+# .github/workflows/Build.yml
 name: .NET Build and Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
 
 env:
-   SOURCE_DIRECTORY: src
+  SOURCE_DIRECTORY: src
 
 jobs:
   test:

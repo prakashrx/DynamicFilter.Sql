@@ -3,12 +3,13 @@ using DynamicFilter.Sql.Grammer;
 using DynamicFilter.Sql.Parser;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DynamicFilter.Sql
 {
-    public class Generator
+    public class FilterExpression
     {
-        public object? Generate(string filter) 
+        public static Func<T, bool> Compile<T>(string filter)
         {
             var inputStream = new AntlrInputStream(filter);
             var lexer = new DynamicFilterLexer(inputStream);
@@ -20,7 +21,12 @@ namespace DynamicFilter.Sql
             {
                 throw new DynamicFilterParseException(listener.Errors);
             }
-            return new DynamicFilterVisitor().Visit(root);
+            var expression =  new DynamicFilterVisitor<T>().Visit(root);
+            if(expression is Expression<Func<T, bool>> lambdaExpression)
+            {
+                return lambdaExpression.Compile();
+            }
+            throw new Exception("Unexpected Expression Type. Returned Expression is not of type: Func<T, bool>.");
         }
     }
 }
