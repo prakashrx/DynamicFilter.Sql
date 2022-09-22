@@ -1,0 +1,66 @@
+# .github/workflows/BuildAndDeploy.yml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  SOURCE_DIRECTORY: src
+  PROJECT_PATH: src/DynamicFilter.Sql/DynamicFilter.Sql.csproj
+  PACKAGE_OUTPUT_DIRECTORY: assets
+  NUGET_SOURCE_URL: "https://api.nuget.org/v3/index.json"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch the whole repo history
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: |
+            6.0.x
+            3.1.x
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.13
+        with:
+          versionSpec: "5.5.0"
+
+      - name: Determine GitVersion
+        id: version
+        uses: gittools/actions/gitversion/execute@v0.9.13
+
+      - name: Restore dependencies
+        run: dotnet restore $SOURCE_DIRECTORY
+
+      - name: Build
+        run: dotnet build $SOURCE_DIRECTORY --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test $SOURCE_DIRECTORY --no-restore --no-build --verbosity normal  --configuration Release
+
+      - name: Nuget Pack
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }} -p:PackageVersion=${{steps.version.outputs.SemVer}} -p:Version=${{steps.version.outputs.SemVer}}
+
+      - name: Publish Nuget Package
+        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source ${{ env.NUGET_SOURCE_URL }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: "v${{steps.version.outputs.SemVer}}"
+          release_name: Release "v${{steps.version.outputs.SemVer}}"
+          draft: false
+          prerelease: false
