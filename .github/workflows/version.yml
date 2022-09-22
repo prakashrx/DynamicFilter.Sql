@@ -12,10 +12,14 @@ jobs:
         with:
           fetch-depth: 0                # fetch the whole repo history
 
-      - name: Determine Version
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.5.0'
+
+      - name: Determine GitVersion
         id: version
         uses: gittools/actions/gitversion/execute@v0.9.7
-
 
       - name: Display Version
         run: echo "${{ toJson(steps.version.outputs)  }}"
