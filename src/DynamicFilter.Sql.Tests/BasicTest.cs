@@ -3,26 +3,11 @@ using Xunit;
 
 namespace DynamicFilter.Sql.Tests
 {
-    public class BasicGrammerTest
+    public class Compile
     {
-        class Item {
-            public string Name { get; set; }
-            public int Id { get; set; }
-            public double Value { get; set; }
-            public bool Active { get; set; }
-        }
-
         [Fact]
-        public void Should_Throw_No_Exceptions_While_Parsing()
+        public void Should_Compile()
         {
-            Assert.True(FilterExpression.Compile<Item>("true")(null));
-            Assert.False(FilterExpression.Compile<Item>("false")(null));
-            Assert.True(FilterExpression.Compile<Item>("1")(null));
-            Assert.False(FilterExpression.Compile<Item>("0")(null));
-            Assert.True(FilterExpression.Compile<Item>("-1")(null));
-            Assert.False(FilterExpression.Compile<Item>("0")(null));
-            Assert.True(FilterExpression.Compile<Item>("1.2")(null));
-            Assert.False(FilterExpression.Compile<Item>("0.0")(null));
 
             Assert.True(FilterExpression.Compile<Item>("Id = 0")(new Item { Id = 0 }));
             Assert.False(FilterExpression.Compile<Item>("Id = 0")(new Item { Id = 1 }));

@@ -1,16 +1,32 @@
 # DynamicFilter.Sql
 
-![](https://github.com/prakashrx/DynamicFilter.Sql/actions/workflows/RunTests.yml/badge.svg)
+![GitHub](https://img.shields.io/github/license/prakashrx/DynamicFilter.Sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/prakashrx/DynamicFilter.Sql/.NET%20Build%20and%20Test) ![Nuget](https://img.shields.io/nuget/v/DynamicFilter.Sql)
 
-A .Net Nuget Library to generate Lambda Expressions dynamically based on a Sql Based Filter criteria.
+A Fast dotnet library to dynamically generate compiled lambda expressions from sql style filters.
+
+**Note: This package is still under active development. Not ready for production use.**
+
+## Installation
+
+DynamicFilter.Sql package can be install via [Nuget](https://www.nuget.org/packages/DynamicFilter.Sql/)
+
+```bash
+dotnet add package DynamicFilter.Sql
+```
+
+## Usage/Examples
 
 ```csharp
-//Basic Idea on how we can use this Library
-var userFilter = FilterExpression.Compile<User>("(Age > 10) and (Name like 'Alice%' or Name like 'Bob%')");
+var myfilter = FilterExpression.Compile<User>("(Age > 10) and (Name like 'Alice%' or Name like 'Bob%')");
 
-//Filter a User collection (users) using the generated lambda expression
-var names = users.Where(userFilter).Select(u => u.Name);
+//Evaluate a single object
+bool match = myFilter(new User {Age = 15, Name="Alice Wonderland"})
+
+//Filter a collection
+var names = users.Where(myfilter).Select(u => u.Name);
 
 ```
 
-### Development In Progress...
+## Authors
+
+- [@prakashrx](https://github.com/prakashrx)

@@ -11,6 +11,9 @@ namespace DynamicFilter.Sql
     {
         public static Func<T, bool> Compile<T>(string filter)
         {
+            if(string.IsNullOrWhiteSpace(filter))
+                throw new ArgumentException("filter is empty", nameof(filter));
+
             var inputStream = new AntlrInputStream(filter);
             var lexer = new DynamicFilterLexer(inputStream);
             var parser = new DynamicFilterParser(new CommonTokenStream(lexer));
