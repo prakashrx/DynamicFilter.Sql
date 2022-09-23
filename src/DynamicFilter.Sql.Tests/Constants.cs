@@ -10,43 +10,48 @@ namespace DynamicFilter.Sql.Tests
 {
     public class Constants
     {
-        [Fact]
-        public void Should_Compile()
+        [Theory]
+        [InlineData("true")]
+        [InlineData("false")]
+        [InlineData("1")]
+        [InlineData("0")]
+        [InlineData("-1")]
+        [InlineData("1.2")]
+        [InlineData("0.0")]
+        [InlineData("Active")]
+        [InlineData("Value")]
+        [InlineData("Id")]
+        public void Should_Compile(string filter)
         {
-            FilterExpression.Compile<Item>("true");
-            FilterExpression.Compile<Item>("false");
-            FilterExpression.Compile<Item>("1");
-            FilterExpression.Compile<Item>("0");
-            FilterExpression.Compile<Item>("-1");
-            FilterExpression.Compile<Item>("0");
-            FilterExpression.Compile<Item>("1.2");
-            FilterExpression.Compile<Item>("0.0");
+            FilterExpression.Compile<Item>(filter);
         }
 
-        [Fact]
-        public void Should_Evaluate_True()
+        [Theory]
+        [InlineData("true")]
+        [InlineData("1")]
+        [InlineData("-1")]
+        [InlineData("1.2")]
+        public void Should_Evaluate_True(string filter)
         {
-            Assert.True(FilterExpression.Compile<Item>("true")(null));
-            Assert.True(FilterExpression.Compile<Item>("1")(null));
-            Assert.True(FilterExpression.Compile<Item>("-1")(null));
-            Assert.True(FilterExpression.Compile<Item>("1.2")(null));
+            Assert.True(FilterExpression.Compile<Item>(filter)(null));
         }
 
-        [Fact]
-        public void Should_Evaluate_False()
+        [Theory]
+        [InlineData("false")]
+        [InlineData("0")]
+        [InlineData("0.0")]
+        public void Should_Evaluate_False(string filter)
         {
-            Assert.False(FilterExpression.Compile<Item>("false")(null));
-            Assert.False(FilterExpression.Compile<Item>("0")(null));
-            Assert.False(FilterExpression.Compile<Item>("0")(null));
-            Assert.False(FilterExpression.Compile<Item>("0.0")(null));
+            Assert.False(FilterExpression.Compile<Item>(filter)(null));
         }
 
-        [Fact]
-        public void Should_Throw_Exception()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void Should_Throw_Exception(string filter)
         {
-            Assert.Throws<ArgumentException>("filter", () => FilterExpression.Compile<Item>(string.Empty)(null) );
-            Assert.Throws<ArgumentException>("filter", () => FilterExpression.Compile<Item>(" ")(null));
-            Assert.Throws<ArgumentException>("filter", () => FilterExpression.Compile<Item>(null)(null));
+            Assert.Throws<ArgumentException>("filter", () => FilterExpression.Compile<Item>(filter)(null));
         }
     }
 }

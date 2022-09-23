@@ -14,16 +14,22 @@ namespace DynamicFilter.Sql.Parser
     {
         private Type type_ = typeof(T);
         private ParameterExpression lambdaParameter_ = Expression.Parameter(typeof(T), "object");
-        private static readonly MethodInfo ConvertIntegerToBool = typeof(Convert).GetMethod(nameof(Convert.ToBoolean), new [] { typeof(int) } );
+        private static readonly MethodInfo ConvertInteger32ToInt64 = typeof(Convert).GetMethod(nameof(Convert.ToInt64), new[] { typeof(Int32) });
+        private static readonly MethodInfo ConvertInteger32ToBool = typeof(Convert).GetMethod(nameof(Convert.ToBoolean), new[] { typeof(Int32) });
+        private static readonly MethodInfo ConvertInteger64ToBool = typeof(Convert).GetMethod(nameof(Convert.ToBoolean), new [] { typeof(Int64) } );
         private static readonly MethodInfo ConvertDoubleToBool = typeof(Convert).GetMethod(nameof(Convert.ToBoolean), new [] { typeof(double) } );
         private static readonly MethodInfo SqlLike = typeof(SqlLikeUtility).GetMethod(nameof(SqlLikeUtility.SqlLike));
         public override Expression VisitRoot([NotNull] DynamicFilterParser.RootContext context)
         {
             var expression = base.Visit(context.expr());
             expression = expression.CanReduce ? expression.Reduce() : expression;
-            if(expression.Type == typeof(int)) 
+            if (expression.Type == typeof(Int32))
             {
-                expression = Expression.Call(ConvertIntegerToBool, expression);
+                expression = Expression.Call(ConvertInteger32ToBool, expression);
+            }
+            if (expression.Type == typeof(Int64)) 
+            {
+                expression = Expression.Call(ConvertInteger64ToBool, expression);
             } 
             else if (expression.Type == typeof(double))
             {
@@ -114,8 +120,8 @@ namespace DynamicFilter.Sql.Parser
             var expressions = context.children.OfType<DynamicFilterParser.ConstantContext>().Select(base.Visit).Cast<ConstantExpression>();
             switch(expressions.First().Type)
             {
-                case Type t when t == typeof(int):
-                    return Expression.Constant(new HashSet<int>(expressions.Select(x => (int)x.Value)));
+                case Type t when t == typeof(Int64):
+                    return Expression.Constant(new HashSet<Int64>(expressions.Select(x => (Int64)x.Value)));
                 case Type t when t == typeof(double):
                     return Expression.Constant(new HashSet<double>(expressions.Select(x => (double)x.Value)));
                 case Type t when t == typeof(bool):
@@ -138,7 +144,7 @@ namespace DynamicFilter.Sql.Parser
         }
         public override Expression VisitIntegerValue([NotNull] DynamicFilterParser.IntegerValueContext context)
         {
-            return Expression.Constant(int.Parse(context.GetText()));
+            return Expression.Constant(Int64.Parse(context.GetText()));
         }
         public override Expression VisitDecimalValue([NotNull] DynamicFilterParser.DecimalValueContext context)
         {
@@ -155,6 +161,12 @@ namespace DynamicFilter.Sql.Parser
         }
 
         Expression CastExpression(Expression expression,
-                                  Type type) => expression.Type == typeof(object) ? Expression.Convert(expression, type) : expression;
+                                  Type type)
+        {
+            if(expression.Type == typeof(Int32))
+                return Expression.Call(ConvertInteger32ToInt64, expression);
+
+            return expression.Type == typeof(object) ? Expression.Convert(expression, type) : expression;
+        }
     }
 }

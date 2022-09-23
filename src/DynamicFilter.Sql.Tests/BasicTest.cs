@@ -3,7 +3,7 @@ using Xunit;
 
 namespace DynamicFilter.Sql.Tests
 {
-    public class Compile
+    public class BasicTest
     {
         [Fact]
         public void Should_Compile()
