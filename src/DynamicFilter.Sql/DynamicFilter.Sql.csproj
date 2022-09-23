@@ -6,6 +6,29 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<Authors>Prakash R</Authors>
+		<Description>
+			A dynamic code generator that convert Sql based filter criteria into compiled lambda expressions.
+		</Description>
+		<Copyright>Prakash R</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl></PackageProjectUrl>
+		<RepositoryUrl>https://github.com/prakashrx/DynamicFilter.Sql</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<PackageTags>dynamic,sql,expression,expressiontree,lambda,sql,filter,dotnet,standard,c#,fast,easy,ast,antlr,where,clause,csharp,linq</PackageTags>
+		<PackageReleaseNotes>A Dotnet standard 2.0 library that dynamically generate compiled lambda expressions from sql style filters.</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6" />
 		<PackageReference Include="Antlr4.Runtime" Version="4.6.6" />

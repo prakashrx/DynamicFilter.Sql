@@ -3,10 +3,8 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    paths:
+      - 'src/**'
 
 env:
   SOURCE_DIRECTORY: src
@@ -17,6 +15,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # run this job only for the main branch
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
