@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - 'src/**'
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 env:
   SOURCE_DIRECTORY: src
