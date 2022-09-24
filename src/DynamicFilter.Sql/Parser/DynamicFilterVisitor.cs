@@ -70,7 +70,7 @@ namespace DynamicFilter.Sql.Parser
             if(context.operation.ISNULL() is not null)
                 return Expression.Equal(left, Expression.Constant(null));
             else if(context.operation.ISNOTNULL() is not null)
-                return Expression.Equal(left, Expression.Constant(null));
+                return Expression.Not(Expression.Equal(left, Expression.Constant(null)));
             throw new DynamicFilterException("Invalid null equality operation found while building expression");
         }
 
@@ -96,9 +96,9 @@ namespace DynamicFilter.Sql.Parser
             var right = context.right.Text.Trim('\'');
 
             if (context.operation.LIKE() is not null)
-                return Expression.Call(SqlLike, Expression.Constant(right), left);
+                return Expression.Call(SqlLike, Expression.Constant(right), CastExpression(left, typeof(string)));
             else if (context.operation.NOTLIKE() is not null)
-                return Expression.Not(Expression.Call(SqlLike, Expression.Constant(right), left));
+                return Expression.Not(Expression.Call(SqlLike, Expression.Constant(right), CastExpression(left, typeof(string))));
 
             throw new DynamicFilterException("Invalid like operation found while building expression");
         }

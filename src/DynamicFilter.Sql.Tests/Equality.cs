@@ -25,21 +25,15 @@ namespace DynamicFilter.Sql.Tests
                 new object[] { "Value == 153.2", item2.ToJson(), true },
                 new object[] { "Value == 54.2", item2.ToJson(), false },
                 new object[] { "Value == -100.2", item5.ToJson(), true },
+                new object[] { "Active = true", item1.ToJson(), true },
+                new object[] { "Active == true", item1.ToJson(), true },
+                new object[] { "Active = true", item3.ToJson(), false },
+                new object[] { "Active == true", item3.ToJson(), false },
+                new object[] { "Active = false", item3.ToJson(), true },
+                new object[] { "Active == false", item3.ToJson(), true },
+                new object[] { "Active = false", item2.ToJson(), false },
+                new object[] { "Active == false", item2.ToJson(), false },
         };
-
-        [Theory]
-        [InlineData("Value = 1.2")]
-        [InlineData("Value == 100.234")]
-        [InlineData("Value = -200.234")]
-        [InlineData("Value == -240.234")]
-        [InlineData("Active = true")]
-        [InlineData("Active == true")]
-        [InlineData("Active = false")]
-        [InlineData("Active == false")]
-        public void Should_Compile(string filter)
-        {
-            FilterExpression.Compile<Item>(filter);
-        }
 
         [Theory]
         [MemberData(nameof(Data))]
