@@ -2,9 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/prakashrx/DynamicFilter.Sql) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/prakashrx/DynamicFilter.Sql/.NET%20Build%20and%20Test) ![Nuget](https://img.shields.io/nuget/v/DynamicFilter.Sql)
 
-A Fast dotnet library to dynamically generate compiled lambda expressions from sql style filters.
-
-**Note: This package is still under active development. Not ready for production use.**
+A Fast and efficient dotnet library to dynamically generate compiled lambda expressions from sql style filters.
 
 ## Installation
 
